@@ -11,48 +11,12 @@
     <link href="css/map.css" rel="stylesheet">
 
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: whitesmoke;
-            font-family: Lato, sans-serif;
-            color: #0D0000;
-        }
-
-        header {
-            width: 80%;
-            margin: 10px auto 10px auto;
-        }
-
-        h1 {
-            display: inline-block;
-            margin-right: 20px;
-            color: #001323;
-        }
-
-        h2 {
-            display: inline-block;
-            color: #001323;
-        }
-
         #map {
-            width: 80%;
+            width: 100%;
             height: 540px;
-            margin: 10px 10%;
             background: whitesmoke;
             border: 2px solid #dddedf;
         }
-
-        footer {
-            padding: 6px 10%;
-            width: 80%;
-        }
-
-        p {
-            font-size: 1em;
-            color: #001323;
-        }
-
          .legend {
             padding: 6px 8px;
             font-size: 1em;
@@ -101,9 +65,8 @@
         </nav>
         <h3 class="text-muted">Project name</h3>
       </div>
-
-      <div class="jumbotron">
-        <div id='map'></div>
+      <div class="row">
+          <div id='map'></div>
       </div>
 
       <div class="row marketing">
@@ -255,7 +218,7 @@
                   div.innerHTML +=
                       '<span style="background:' + color + '"></span> ' +
                       '<label>$' + breaks[i][0] + ' &mdash; ' +
-                      breaks[i][1] + '</label>';
+                      breaks[i][1] + '</label>'+ ' <br>';
               }
 
               // return the populated div to be added to the map
