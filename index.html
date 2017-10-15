@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
     <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+    <link href="css/map.css" rel="stylesheet">
 
     <style>
         body {
@@ -83,171 +84,208 @@
 </head>
 
 <body>
-    <header>
-        <h1>"Average Rental Price"</h1>
-        <h2>Per County</h2>
-    </header>
+  <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills float-right">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">Project name</h3>
+      </div>
 
-    <div id='map'></div>
+      <div class="jumbotron">
+        <div id='map'></div>
+      </div>
 
-    <footer>
-        <p>Map produced by Kevin Hough June 2017</p>
-        <p>Data Source: <a href="https://factfinder.census.gov/">American Fact Finder</a>.</p>
-        <p>
-        </p>
-    </footer>
+      <div class="row marketing">
+        <div class="col-lg-6">
+          <h4>Subheading</h4>
+          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
 
+          <h4>Subheading</h4>
+          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/simple-statistics@2.5.0/dist/simple-statistics.min.js"></script>
+          <h4>Subheading</h4>
+          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+        </div>
 
-    <script>
-        var options = {
-            center: [37.8, -95.8],
-            zoom: 4,
-            zoomSnap: .1,
-            zoomControl: false
-        }
-        var map = L.map('map', options);
+        <div class="col-lg-6">
+          <h4>Subheading</h4>
+          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
 
-        map.addControl(L.control.zoom({
-            position: 'topright'
-        }));
+          <h4>Subheading</h4>
+          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
 
-        $.getJSON("data/counties_median_rent_2015.json", function (data) {
+          <h4>Subheading</h4>
+          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+        </div>
+      </div>
 
+      <footer>
+          <p>Map produced by Kevin Hough June 2017</p>
+          <p>Data Source: <a href="https://factfinder.census.gov/">American Fact Finder</a>.</p>
+          <p>
+          </p>
+      </footer>
 
-            var dataLayer = L.geoJson(data, {
-                style: function (feature) {
-                    return {
-                        color: '#dddddd',
-                        weight: 1,
-                        fillOpacity: 1,
-                        fillColor: '#1f78b4'
-                    };
-                },
-                onEachFeature: function(feature, layer) {
-                    var tooltip = feature.properties.NAME + '<br> $' +
-                    feature.properties.RENT + ' per month';
+    </div> <!-- /container -->
+  </body>
 
-                    layer.bindTooltip(tooltip);
-                }
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/simple-statistics@2.5.0/dist/simple-statistics.min.js"></script>
 
-            }).addTo(map);
+  <script>
+      var options = {
+          center: [37.8, -95.8],
+          zoom: 4,
+          zoomSnap: .1,
+          zoomControl: false
+      }
+      var map = L.map('map', options);
 
-            drawMap(dataLayer)
+      map.addControl(L.control.zoom({
+          position: 'topright'
+      }));
 
-        });
-        //set breaks
-        function drawMap(dataLayer) {
-
-            var breaks = getClassBreaks(dataLayer);
-
-            dataLayer.eachLayer(function (layer) {
-
-                layer.setStyle({
-                    fillColor: getColor(+layer.feature.properties.RENT, breaks)
-
-                })
-
-            });
-
-            drawLegend(breaks);
-        }
-
-
-
-
-        function getClassBreaks(dataLayer) {
-
-            var values = []
-
-            dataLayer.eachLayer(function (layer) {
-
-                if(layer.feature.properties.RENT != null) {
-                    values.push(Number(layer.feature.properties.RENT));
-                }
-
-            });
-
-            var cluster = ss.ckmeans(values, 5);
+      $.getJSON("data/counties_median_rent_2015.json", function (data) {
 
 
-            var breaks = cluster.map(function (cluster) {
+          var dataLayer = L.geoJson(data, {
+              style: function (feature) {
+                  return {
+                      color: '#dddddd',
+                      weight: 1,
+                      fillOpacity: 1,
+                      fillColor: '#1f78b4'
+                  };
+              },
+              onEachFeature: function(feature, layer) {
+                  var tooltip = feature.properties.NAME + '<br> $' +
+                  feature.properties.RENT + ' per month';
 
-                return [cluster[0], cluster.pop()];
+                  layer.bindTooltip(tooltip);
+              }
 
-            });
+          }).addTo(map);
 
-            return breaks;
+          drawMap(dataLayer)
 
-        }
+      });
+      //set breaks
+      function drawMap(dataLayer) {
 
-        function drawLegend(breaks) {
+          var breaks = getClassBreaks(dataLayer);
 
-            // create a new Leaflet control object, and position it top left
-            var legend = L.control({
-                position: 'topleft'
-            });
+          dataLayer.eachLayer(function (layer) {
 
-            // when the legend is added to the map
+              layer.setStyle({
+                  fillColor: getColor(+layer.feature.properties.RENT, breaks)
 
-            legend.onAdd = function () {
+              })
 
-                // create a new HTML <div> element and give it a class name of "legend"
-                var div = L.DomUtil.create('div', 'legend');
+          });
 
-                // first append an <h3> tag to the div holding the current attribute
-                // and norm values (i.e., the mapped phenomena)
-                div.innerHTML = "<h3>" + "Average Rental Price" + "</h3>";
-
-                // for each of our breaks
-                for (var i = 0; i < breaks.length; i++) {
-                    // determine the color associated with each break value,
-                    // including the lower range value
-                    var color = getColor(breaks[i][1], breaks);
-
-                    // concatenate a <span> tag styled with the color and the range values
-                    // of that class and include a label with the low and a high ends of that class range
-                    div.innerHTML +=
-                        '<span style="background:' + color + '"></span> ' +
-                        '<label>$' + breaks[i][0] + ' &mdash; ' +
-                        breaks[i][1] + '</label>';
-                }
-
-                // return the populated div to be added to the map
-                return div;
-            };
-
-
-            // add the legend to the map
-            legend.addTo(map);
-        }
-
-        function getColor(d, breaks) {
-
-            if (d <= breaks[0][1]) {
-                return '#ffffb2';
-            } else if (d <= breaks[1][1]) {
-                return '#fecc5c';
-            } else if (d <= breaks[2][1]) {
-                return '#fd8d3c';
-            } else if (d <= breaks[3][1]) {
-                return '#f03b20'
-            } else if (d <= breaks[4][1]) {
-                return '#bd0026'
-            }
-        }
+          drawLegend(breaks);
+      }
 
 
 
-    </script>
 
-</body>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+      function getClassBreaks(dataLayer) {
 
+          var values = []
+
+          dataLayer.eachLayer(function (layer) {
+
+              if(layer.feature.properties.RENT != null) {
+                  values.push(Number(layer.feature.properties.RENT));
+              }
+
+          });
+
+          var cluster = ss.ckmeans(values, 5);
+
+
+          var breaks = cluster.map(function (cluster) {
+
+              return [cluster[0], cluster.pop()];
+
+          });
+
+          return breaks;
+
+      }
+
+      function drawLegend(breaks) {
+
+          // create a new Leaflet control object, and position it top left
+          var legend = L.control({
+              position: 'topleft'
+          });
+
+          // when the legend is added to the map
+
+          legend.onAdd = function () {
+
+              // create a new HTML <div> element and give it a class name of "legend"
+              var div = L.DomUtil.create('div', 'legend');
+
+              // first append an <h3> tag to the div holding the current attribute
+              // and norm values (i.e., the mapped phenomena)
+              div.innerHTML = "<h3>" + "Average Rental Price" + "</h3>";
+
+              // for each of our breaks
+              for (var i = 0; i < breaks.length; i++) {
+                  // determine the color associated with each break value,
+                  // including the lower range value
+                  var color = getColor(breaks[i][1], breaks);
+
+                  // concatenate a <span> tag styled with the color and the range values
+                  // of that class and include a label with the low and a high ends of that class range
+                  div.innerHTML +=
+                      '<span style="background:' + color + '"></span> ' +
+                      '<label>$' + breaks[i][0] + ' &mdash; ' +
+                      breaks[i][1] + '</label>';
+              }
+
+              // return the populated div to be added to the map
+              return div;
+          };
+
+
+          // add the legend to the map
+          legend.addTo(map);
+      }
+
+      function getColor(d, breaks) {
+
+          if (d <= breaks[0][1]) {
+              return '#ffffb2';
+          } else if (d <= breaks[1][1]) {
+              return '#fecc5c';
+          } else if (d <= breaks[2][1]) {
+              return '#fd8d3c';
+          } else if (d <= breaks[3][1]) {
+              return '#f03b20'
+          } else if (d <= breaks[4][1]) {
+              return '#bd0026'
+          }
+      }
+
+
+  </script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 
 </html>
